@@ -11,9 +11,9 @@ async function bootstrap() {
     .setDescription('The FinManager API Documentation')
     .setVersion('1.0')
     .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
-    .addTag('auth')
-    .addTag('user')
-    .addTag('expense')
+    .addTag('auth', 'Operations related to authentication')
+    .addTag('profile', 'Operations related to user profile')
+    .addTag('categories', 'Operations related to categories')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/documentation', app, documentFactory);
