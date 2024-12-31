@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { comparePasswords } from 'src/lib/utils';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 import { RegisterDto } from './dto/register-dto';
 import { JwtDto } from './dto/jwt-dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(email);
+    const user = await this.userService.findOne(email);
     if (user && (await comparePasswords(pass, user.password))) {
       const { password, ...result } = user; // eslint-disable-line @typescript-eslint/no-unused-vars
       return result;
@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto): Promise<JwtDto> {
-    const newUser = await this.usersService.create(registerDto);
+    const newUser = await this.userService.create(registerDto);
     return this.login(newUser);
   }
 }

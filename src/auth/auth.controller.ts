@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
-import { UsersService } from 'src/users/users.service';
+import { UserService } from 'src/user/user.service';
 import { Response } from 'express';
 import {
   ApiBearerAuth,
@@ -26,8 +26,8 @@ import { JwtDto } from './dto/jwt-dto';
 @Controller('auth')
 export class AuthController {
   constructor(
-    private authService: AuthService,
-    private usersService: UsersService,
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
   ) {}
 
   @UseGuards(LocalAuthGuard)
@@ -76,7 +76,7 @@ export class AuthController {
     description: 'Email already exists',
   })
   async register(@Body() registerDto: RegisterDto, @Res() res: Response) {
-    if (await this.usersService.emailExists(registerDto.email)) {
+    if (await this.userService.emailExists(registerDto.email)) {
       return res
         .status(HttpStatus.BAD_REQUEST)
         .json({ message: 'Email already exists' });
