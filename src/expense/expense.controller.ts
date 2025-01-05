@@ -26,7 +26,7 @@ import { Expense } from './entities/expense.entity';
 @UseGuards(JwtAuthGuard)
 @ApiTags('expenses')
 @ApiBearerAuth()
-@Controller('expenses')
+@Controller({ version: '1', path: 'expenses' })
 export class ExpenseController {
   constructor(private readonly expenseService: ExpenseService) {}
 

@@ -9,7 +9,7 @@ import {
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('profile')
-@Controller()
+@Controller({ version: '1' })
 export class AppController {
   constructor() {}
 

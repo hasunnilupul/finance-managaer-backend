@@ -23,7 +23,7 @@ import { RegisterDto } from './dto/register-dto';
 import { JwtDto } from './dto/jwt-dto';
 
 @ApiTags('auth')
-@Controller('auth')
+@Controller({ version: '1', path: 'auth' })
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
