@@ -1,7 +1,11 @@
+import { Expense } from 'src/expense/entities/expense.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -13,9 +17,18 @@ export class Category {
   @Column()
   name: string;
 
-  @Column({ unique: true })
+  @Column()
   color: string;
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @OneToMany(() => Expense, (expense) => expense.category)
+  expenses: Expense[];
+
+  @ManyToOne(() => User, (user) => user.expenses)
+  user: User;
+
+  @Column('user_id')
+  userId: number;
 }

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -37,8 +38,8 @@ export class CategoryController {
     description: 'Successfully created a new category',
     type: Category,
   })
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.create(createCategoryDto);
+  create(@Request() req, @Body() createCategoryDto: CreateCategoryDto) {
+    return this.categoryService.createForUser(req.user?.id, createCategoryDto);
   }
 
   @Get()
@@ -48,8 +49,8 @@ export class CategoryController {
     description: 'Successfully retrieved all categories',
     type: Array<Category>,
   })
-  findAll() {
-    return this.categoryService.findAll();
+  findAll(@Request() req) {
+    return this.categoryService.findAllByUser(req.user?.id);
   }
 
   @Get(':id')
@@ -64,8 +65,8 @@ export class CategoryController {
     status: 404,
     description: 'Category not found',
   })
-  findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(+id);
+  findOne(@Request() req, @Param('id') id: string) {
+    return this.categoryService.findOneByUser(+id, req.user?.id);
   }
 
   @Patch(':id')

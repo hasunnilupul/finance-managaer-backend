@@ -12,16 +12,23 @@ export class CategoryService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
-  create(createCategoryDto: CreateCategoryDto): Promise<Category> {
-    return this.categoryRepository.save(createCategoryDto);
+  createForUser(
+    userId: number,
+    createCategoryDto: CreateCategoryDto,
+  ): Promise<Category> {
+    const newCategory = this.categoryRepository.create({
+      userId: userId,
+      ...createCategoryDto,
+    });
+    return this.categoryRepository.save(newCategory);
   }
 
-  findAll(): Promise<Category[]> {
-    return this.categoryRepository.find();
+  findAllByUser(userId: number): Promise<Category[]> {
+    return this.categoryRepository.findBy({ userId });
   }
 
-  async findOne(id: number): Promise<Category> {
-    const category = await this.categoryRepository.findOneBy({ id });
+  async findOneByUser(id: number, userId: number): Promise<Category> {
+    const category = await this.categoryRepository.findOneBy({ id, userId });
     if (!category) {
       throw new NotFoundException('Category not found');
     }
